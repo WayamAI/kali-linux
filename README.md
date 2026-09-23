@@ -2,7 +2,7 @@
 
 Lightweight Kali Linux Docker images with curated CLI penetration testing tools for headless environments. This project provides optimized Docker images for security research, penetration testing, and cybersecurity training.
 
-> Maintained by [Wayam AI](https://github.com/WayamAI) as the default sandbox image for [Vedha](https://github.com/WayamAI/Vedha). Derived from the MIT-licensed [wayamai/kali-linux-image](https://github.com/wayamai/kali-linux-image).
+> Maintained by [Wayam AI](https://github.com/WayamAI) as the default sandbox image for [Vedha](https://github.com/WayamAI/Vedha). Derived from the MIT-licensed [vxcontrol/kali-linux-image](https://github.com/vxcontrol/kali-linux-image).
 
 ## Description
 
