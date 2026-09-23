@@ -34,16 +34,16 @@ Vedha Kali Linux is a lean, reproducible Docker image built for security researc
 
 ```bash
 # Pull the base image
-docker pull wayamai/kali-linux
+docker pull mrigankad/kali-linux
 
 # Drop into an interactive shell with the current directory mounted
-docker run --rm -it -v "$(pwd):/work" -w /work wayamai/kali-linux bash
+docker run --rm -it -v "$(pwd):/work" -w /work mrigankad/kali-linux bash
 
 # Run a single tool without an interactive session
-docker run --rm wayamai/kali-linux nmap --version
+docker run --rm mrigankad/kali-linux nmap --version
 ```
 
-Two tags are published: `wayamai/kali-linux:latest` (the base image) and `wayamai/kali-linux:systemd` (adds `systemctl` support for tools that expect services). See [Available Images](#available-images) for the full matrix and [Building from Source](#building-from-source) to build locally.
+Two tags are published: `mrigankad/kali-linux:latest` (the base image) and `mrigankad/kali-linux:systemd` (adds `systemctl` support for tools that expect services). See [Available Images](#available-images) for the full matrix and [Building from Source](#building-from-source) to build locally.
 
 ## Description
 
@@ -64,14 +64,14 @@ The containers provide a clean, reproducible environment where AI agents can lev
 ### 1. Base Kali Linux Image
 Lightweight container with essential penetration testing tools, automatically built and published on Docker Hub.
 
-**Available on Docker Hub**: [wayamai/kali-linux](https://hub.docker.com/r/wayamai/kali-linux)
+**Available on Docker Hub**: [mrigankad/kali-linux](https://hub.docker.com/r/mrigankad/kali-linux)
 
 ```bash
 # Pull latest image from Docker Hub
-docker pull wayamai/kali-linux
+docker pull mrigankad/kali-linux
 
 # Run interactive session
-docker run --rm -it wayamai/kali-linux bash
+docker run --rm -it mrigankad/kali-linux bash
 
 # Build from source (using Docker Buildx Bake)
 docker buildx bake base --set="base.tags=local/kali-linux:latest" --load
@@ -88,10 +88,10 @@ Extended image with systemctl functionality using docker-systemctl-replacement, 
 
 ```bash
 # Pull systemd image from Docker Hub
-docker pull wayamai/kali-linux:systemd
+docker pull mrigankad/kali-linux:systemd
 
 # Run with systemctl support
-docker run --rm -it wayamai/kali-linux:systemd bash
+docker run --rm -it mrigankad/kali-linux:systemd bash
 
 # Build systemd variant from source (using Docker Buildx Bake)
 docker buildx bake systemd --set="systemd.tags=local/kali-linux:systemd" --load
@@ -315,31 +315,31 @@ The base image includes carefully curated CLI tools organized by security testin
 For security research and penetration testing practice:
 ```bash
 # Interactive shell with current directory mounted
-docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux bash
+docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux bash
 
 # Network scanning with required capabilities
-docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux nmap -sS target.com
+docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux nmap -sS target.com
 
 # Web application testing
-docker run --rm -v $(pwd):/data -w /data wayamai/kali-linux sqlmap -u "http://target.com/page?id=1"
+docker run --rm -v $(pwd):/data -w /data mrigankad/kali-linux sqlmap -u "http://target.com/page?id=1"
 
 # Using Docker socket for container management
-docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/work wayamai/kali-linux bash
+docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/work mrigankad/kali-linux bash
 ```
 
 ### Production & Automation
 For automated security testing and CI/CD integration:
 ```bash
 # Automated vulnerability scanning
-docker run --rm -v $(pwd)/results:/results wayamai/kali-linux \
+docker run --rm -v $(pwd)/results:/results mrigankad/kali-linux \
   nuclei -t /nuclei-templates -u target.com -o /results/scan.json
 
 # Batch subdomain enumeration
 docker run --rm -v $(pwd)/domains.txt:/input.txt -v $(pwd)/results:/output \
-  wayamai/kali-linux subfinder -dL /input.txt -o /output/subdomains.txt
+  mrigankad/kali-linux subfinder -dL /input.txt -o /output/subdomains.txt
 
 # Automated web directory scanning
-docker run --rm -v $(pwd)/results:/results wayamai/kali-linux \
+docker run --rm -v $(pwd)/results:/results mrigankad/kali-linux \
   gobuster dir -u http://target.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -o /results/dirs.txt
 ```
 
@@ -347,7 +347,7 @@ docker run --rm -v $(pwd)/results:/results wayamai/kali-linux \
 ```yaml
 services:
   kali:
-    image: wayamai/kali-linux
+    image: mrigankad/kali-linux
     volumes:
       - ./home:/work
       - /var/run/docker.sock:/var/run/docker.sock
@@ -369,7 +369,7 @@ mkdir -p ~/kali-data/{home,configs}
 docker run --rm -it \
   -v ~/kali-data/home:/work \
   -v ~/kali-data/configs:/root/.config \
-  wayamai/kali-linux bash
+  mrigankad/kali-linux bash
 ```
 
 ### Tool Aliases for Quick Access
@@ -381,58 +381,58 @@ Add these aliases to your shell profile (`.bashrc`, `.zshrc`) for instant access
 
 ```bash
 # Network scanning
-alias nmap='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux nmap'
-alias masscan='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux masscan'
-alias naabu='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux naabu'
+alias nmap='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux nmap'
+alias masscan='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux masscan'
+alias naabu='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux naabu'
 
 # Web application testing
-alias nuclei='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux nuclei'
-alias sqlmap='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux sqlmap'
-alias gobuster='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux gobuster'
-alias ffuf='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux ffuf'
-alias nikto='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux nikto'
-alias whatweb='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux whatweb'
-alias dirb='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux dirb'
-alias feroxbuster='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux feroxbuster'
+alias nuclei='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux nuclei'
+alias sqlmap='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux sqlmap'
+alias gobuster='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux gobuster'
+alias ffuf='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux ffuf'
+alias nikto='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux nikto'
+alias whatweb='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux whatweb'
+alias dirb='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux dirb'
+alias feroxbuster='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux feroxbuster'
 
 # Reconnaissance & OSINT
-alias subfinder='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux subfinder'
-alias httpx='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux httpx'
-alias amass='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux amass'
-alias katana='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux katana'
-alias theharvester='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux theharvester'
-alias shodan='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux shodan'
+alias subfinder='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux subfinder'
+alias httpx='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux httpx'
+alias amass='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux amass'
+alias katana='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux katana'
+alias theharvester='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux theharvester'
+alias shodan='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux shodan'
 
 # Windows/AD testing
-alias crackmapexec='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux crackmapexec'
-alias evil-winrm='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux evil-winrm'
-alias impacket-secretsdump='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux impacket-secretsdump'
-alias impacket-psexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-psexec'
-alias impacket-smbexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-smbexec'
-alias impacket-wmiexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-wmiexec'
-alias bloodhound-python='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux bloodhound-python'
-alias responder='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux responder'
+alias crackmapexec='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux crackmapexec'
+alias evil-winrm='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux evil-winrm'
+alias impacket-secretsdump='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux impacket-secretsdump'
+alias impacket-psexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-psexec'
+alias impacket-smbexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-smbexec'
+alias impacket-wmiexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-wmiexec'
+alias bloodhound-python='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux bloodhound-python'
+alias responder='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux responder'
 
 # Password cracking
-alias hashcat='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hashcat'
-alias john='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux john'
-alias hydra='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hydra'
-alias medusa='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux medusa'
-alias hashid='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hashid'
+alias hashcat='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hashcat'
+alias john='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux john'
+alias hydra='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hydra'
+alias medusa='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux medusa'
+alias hashid='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hashid'
 
 # Metasploit framework
-alias msfconsole='docker run --rm -it --net=host -v ~/.msf4:/root/.msf4 -v $(pwd):/work -w /work wayamai/kali-linux msfconsole'
-alias msfvenom='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux msfvenom'
-alias msfdb='docker run --rm -v ~/.msf4:/root/.msf4 wayamai/kali-linux msfdb'
+alias msfconsole='docker run --rm -it --net=host -v ~/.msf4:/root/.msf4 -v $(pwd):/work -w /work mrigankad/kali-linux msfconsole'
+alias msfvenom='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux msfvenom'
+alias msfdb='docker run --rm -v ~/.msf4:/root/.msf4 mrigankad/kali-linux msfdb'
 
 # Network analysis
-alias ncrack='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux ncrack'
-alias arp-scan='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux arp-scan'
-alias netdiscover='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW -v $(pwd):/work -w /work wayamai/kali-linux netdiscover'
+alias ncrack='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux ncrack'
+alias arp-scan='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux arp-scan'
+alias netdiscover='docker run --rm --net=host --cap-add NET_ADMIN --cap-add NET_RAW -v $(pwd):/work -w /work mrigankad/kali-linux netdiscover'
 
 # Interactive shell
-alias kali-shell='docker run --rm -it -v $(pwd):/work -w /work --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux bash'
-alias kali-shell-systemd='docker run --rm -it -v $(pwd):/work -w /work --cap-add NET_ADMIN --cap-add NET_RAW wayamai/kali-linux:systemd bash'
+alias kali-shell='docker run --rm -it -v $(pwd):/work -w /work --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux bash'
+alias kali-shell-systemd='docker run --rm -it -v $(pwd):/work -w /work --cap-add NET_ADMIN --cap-add NET_RAW mrigankad/kali-linux:systemd bash'
 ```
 </details>
 
@@ -443,56 +443,56 @@ For macOS users, add these aliases to your shell profile (`.zshrc`, `.bash_profi
 
 ```bash
 # Network scanning (without raw capabilities due to Docker Desktop limitations)
-alias nmap='docker run --rm --net=host wayamai/kali-linux nmap'
-alias masscan='docker run --rm --net=host wayamai/kali-linux masscan'
-alias naabu='docker run --rm --net=host wayamai/kali-linux naabu'
+alias nmap='docker run --rm --net=host mrigankad/kali-linux nmap'
+alias masscan='docker run --rm --net=host mrigankad/kali-linux masscan'
+alias naabu='docker run --rm --net=host mrigankad/kali-linux naabu'
 
 # Web application testing
-alias nuclei='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux nuclei'
-alias sqlmap='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux sqlmap'
-alias gobuster='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux gobuster'
-alias ffuf='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux ffuf'
-alias nikto='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux nikto'
-alias whatweb='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux whatweb'
-alias dirb='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux dirb'
-alias feroxbuster='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux feroxbuster'
+alias nuclei='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux nuclei'
+alias sqlmap='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux sqlmap'
+alias gobuster='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux gobuster'
+alias ffuf='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux ffuf'
+alias nikto='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux nikto'
+alias whatweb='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux whatweb'
+alias dirb='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux dirb'
+alias feroxbuster='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux feroxbuster'
 
 # Reconnaissance & OSINT
-alias subfinder='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux subfinder'
-alias httpx='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux httpx'
-alias amass='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux amass'
-alias katana='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux katana'
-alias theharvester='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux theharvester'
-alias shodan='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux shodan'
+alias subfinder='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux subfinder'
+alias httpx='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux httpx'
+alias amass='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux amass'
+alias katana='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux katana'
+alias theharvester='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux theharvester'
+alias shodan='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux shodan'
 
 # Windows/AD testing
-alias crackmapexec='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux crackmapexec'
-alias evil-winrm='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux evil-winrm'
-alias impacket-secretsdump='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux impacket-secretsdump'
-alias impacket-psexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-psexec'
-alias impacket-smbexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-smbexec'
-alias impacket-wmiexec='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux impacket-wmiexec'
-alias bloodhound-python='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux bloodhound-python'
-alias responder='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux responder'
+alias crackmapexec='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux crackmapexec'
+alias evil-winrm='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux evil-winrm'
+alias impacket-secretsdump='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux impacket-secretsdump'
+alias impacket-psexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-psexec'
+alias impacket-smbexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-smbexec'
+alias impacket-wmiexec='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux impacket-wmiexec'
+alias bloodhound-python='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux bloodhound-python'
+alias responder='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux responder'
 
 # Password cracking
-alias hashcat='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hashcat'
-alias john='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux john'
-alias hydra='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hydra'
-alias medusa='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux medusa'
-alias hashid='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux hashid'
+alias hashcat='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hashcat'
+alias john='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux john'
+alias hydra='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hydra'
+alias medusa='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux medusa'
+alias hashid='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux hashid'
 
 # Metasploit framework
-alias msfconsole='docker run --rm -it --net=host -v ~/.msf4:/root/.msf4 -v $(pwd):/work -w /work wayamai/kali-linux msfconsole'
-alias msfvenom='docker run --rm -v $(pwd):/work -w /work wayamai/kali-linux msfvenom'
-alias msfdb='docker run --rm -v ~/.msf4:/root/.msf4 wayamai/kali-linux msfdb'
+alias msfconsole='docker run --rm -it --net=host -v ~/.msf4:/root/.msf4 -v $(pwd):/work -w /work mrigankad/kali-linux msfconsole'
+alias msfvenom='docker run --rm -v $(pwd):/work -w /work mrigankad/kali-linux msfvenom'
+alias msfdb='docker run --rm -v ~/.msf4:/root/.msf4 mrigankad/kali-linux msfdb'
 
 # Network analysis (limited capabilities on macOS)
-alias ncrack='docker run --rm --net=host -v $(pwd):/work -w /work wayamai/kali-linux ncrack'
+alias ncrack='docker run --rm --net=host -v $(pwd):/work -w /work mrigankad/kali-linux ncrack'
 
 # Interactive shell
-alias kali-shell='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux bash'
-alias kali-shell-systemd='docker run --rm -it -v $(pwd):/work -w /work wayamai/kali-linux:systemd bash'
+alias kali-shell='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux bash'
+alias kali-shell-systemd='docker run --rm -it -v $(pwd):/work -w /work mrigankad/kali-linux:systemd bash'
 ```
 
 **Note for macOS users:** Raw network capabilities (`--cap-add NET_ADMIN --cap-add NET_RAW`) are not available in Docker Desktop for Mac, so they are omitted from network scanning tools. For advanced network testing, consider using a Linux VM or remote testing environment.
@@ -509,7 +509,7 @@ AI agents can programmatically execute any of the 200+ included tools by sending
 {
   "action": "terminal",
   "command": "nmap -sS -O target.example.com",
-  "container": "wayamai/kali-linux"
+  "container": "mrigankad/kali-linux"
 }
 ```
 
@@ -526,7 +526,7 @@ Multiple AI agents can coordinate complex testing scenarios:
 docker run --rm -d --name vedha-terminal-123 \
   --cap-add NET_ADMIN --cap-add NET_RAW \
   -v /tmp/vedha-results:/results \
-  wayamai/kali-linux tail -f /dev/null
+  mrigankad/kali-linux tail -f /dev/null
 
 # AI agents execute commands within the session (terminal)
 docker exec vedha-terminal-123 nmap -sn 192.168.1.0/24
@@ -625,8 +625,8 @@ docker buildx bake base --set="base.tags=local/kali-linux:latest" --load
 # Build with automatic cache management
 docker buildx bake base --load \
   --set="base.tags=local/kali-linux:latest" \
-  --set="*.cache-from=type=registry,ref=wayamai/kali-linux:buildcache" \
-  --set="*.cache-to=type=registry,ref=wayamai/kali-linux:buildcache,mode=max"
+  --set="*.cache-from=type=registry,ref=mrigankad/kali-linux:buildcache" \
+  --set="*.cache-to=type=registry,ref=mrigankad/kali-linux:buildcache,mode=max"
 
 # Build both base and systemd sequentially (recommended)
 docker buildx bake sequential --load \
@@ -678,15 +678,15 @@ docker buildx bake --set="*.platform=linux/amd64" --load
 
 ### Publishing to Registry
 
-#### Default Registry (wayamai/kali-linux)
+#### Default Registry (mrigankad/kali-linux)
 ```bash
 # Build and push both images to default registry with multi-platform support
 docker buildx bake --push
 
 # Alternative: Build and push with explicit tags
 docker buildx bake --push \
-  --set="base.tags=wayamai/kali-linux:latest" \
-  --set="systemd.tags=wayamai/kali-linux:systemd"
+  --set="base.tags=mrigankad/kali-linux:latest" \
+  --set="systemd.tags=mrigankad/kali-linux:systemd"
 ```
 
 #### Custom Registry
@@ -726,13 +726,13 @@ TAG=v1.2.3 REGISTRY=myregistry docker buildx bake --push
 
 # Build specific version tags
 docker buildx bake --push \
-  --set="base.tags=wayamai/kali-linux:latest,wayamai/kali-linux:v2024.1" \
-  --set="systemd.tags=wayamai/kali-linux:systemd,wayamai/kali-linux:systemd-v2024.1"
+  --set="base.tags=mrigankad/kali-linux:latest,mrigankad/kali-linux:v2024.1" \
+  --set="systemd.tags=mrigankad/kali-linux:systemd,mrigankad/kali-linux:systemd-v2024.1"
 
 # Build with optimized builder configuration
 docker buildx bake --builder kali-builder --push \
-  --set="*.cache-from=type=registry,ref=wayamai/kali-linux:buildcache" \
-  --set="*.cache-to=type=registry,ref=wayamai/kali-linux:buildcache,mode=max"
+  --set="*.cache-from=type=registry,ref=mrigankad/kali-linux:buildcache" \
+  --set="*.cache-to=type=registry,ref=mrigankad/kali-linux:buildcache,mode=max"
 
 # Local development build without attestations (faster)
 docker buildx bake --load --set="base.attest=" --set="systemd.attest="
@@ -751,26 +751,26 @@ docker buildx du --builder kali-builder
 #### Viewing SBOM and Provenance
 ```bash
 # Inspect image attestations
-docker buildx imagetools inspect wayamai/kali-linux:latest --format "{{json .Attestations}}"
+docker buildx imagetools inspect mrigankad/kali-linux:latest --format "{{json .Attestations}}"
 
 # Extract SBOM using Docker Scout (if available)
-docker scout sbom wayamai/kali-linux:latest
+docker scout sbom mrigankad/kali-linux:latest
 
 # View attestations with cosign (requires cosign installation)
-cosign verify-attestation --type spdxjson wayamai/kali-linux:latest
-cosign verify-attestation --type slsaprovenance wayamai/kali-linux:latest
+cosign verify-attestation --type spdxjson mrigankad/kali-linux:latest
+cosign verify-attestation --type slsaprovenance mrigankad/kali-linux:latest
 ```
 
 #### Supply Chain Verification
 ```bash
 # Verify image signatures and attestations
-docker trust inspect wayamai/kali-linux:latest
+docker trust inspect mrigankad/kali-linux:latest
 
 # Check for vulnerabilities using generated SBOM
-docker scout cves wayamai/kali-linux:latest
+docker scout cves mrigankad/kali-linux:latest
 
 # Audit compliance using SBOM data
-docker scout compliance wayamai/kali-linux:latest
+docker scout compliance mrigankad/kali-linux:latest
 ```
 
 ### Build Configuration
@@ -867,7 +867,7 @@ Access Docker daemon from within the container for orchestration and testing:
 docker run --rm -it \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v $(pwd):/work \
-  wayamai/kali-linux bash
+  mrigankad/kali-linux bash
 
 # Inside container - you can now run Docker commands
 docker ps
@@ -887,7 +887,7 @@ docker run --rm -it \
   --cap-add NET_ADMIN \
   --cap-add NET_RAW \
   --net=host \
-  wayamai/kali-linux bash
+  mrigankad/kali-linux bash
 
 # Tools that benefit from these capabilities:
 # - nmap (SYN scans, OS detection)
@@ -939,14 +939,14 @@ docker buildx bake dependent --push
 Verify all tools are working correctly with the included validation script:
 
 ```bash
-# Test default image (wayamai/kali-linux:latest)
+# Test default image (mrigankad/kali-linux:latest)
 ./test-tools.sh
 
 # Test specific image
 ./test-tools.sh local/kali-linux:latest
 
 # Enable debug output for troubleshooting
-DEBUG=1 ./test-tools.sh wayamai/kali-linux:latest
+DEBUG=1 ./test-tools.sh mrigankad/kali-linux:latest
 
 # Download script directly (if not using repository)
 curl -sSL https://raw.githubusercontent.com/WayamAI/kali-linux/main/test-tools.sh | bash
@@ -972,7 +972,7 @@ See [Disclaimer](#disclaimer) section for complete legal and ethical usage guide
 
 ## systemctl Support
 
-The systemd-enabled image (`wayamai/kali-linux:systemd`) uses [docker-systemctl-replacement](https://github.com/gdraheim/docker-systemctl-replacement) to provide systemctl functionality without full systemd overhead. This enables:
+The systemd-enabled image (`mrigankad/kali-linux:systemd`) uses [docker-systemctl-replacement](https://github.com/gdraheim/docker-systemctl-replacement) to provide systemctl functionality without full systemd overhead. This enables:
 - Service management commands
 - Compatibility with tools expecting systemctl
 - Stable operation in container environments
@@ -980,10 +980,10 @@ The systemd-enabled image (`wayamai/kali-linux:systemd`) uses [docker-systemctl-
 
 ```bash
 # Use published systemd image
-docker run --rm wayamai/kali-linux:systemd systemctl --version
+docker run --rm mrigankad/kali-linux:systemd systemctl --version
 
 # Start services (example with apache2)
-docker run --rm -it wayamai/kali-linux:systemd bash
+docker run --rm -it mrigankad/kali-linux:systemd bash
 # systemctl start apache2
 
 # Build systemd-enabled image locally

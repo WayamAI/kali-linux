@@ -20,7 +20,7 @@ variable "TAG" {
 }
 
 variable "REGISTRY" {
-  default = "wayamai"
+  default = "mrigankad"
 }
 
 # Base Kali Linux image with essential penetration testing tools
@@ -43,7 +43,7 @@ target "base" {
   labels = {
     "org.opencontainers.image.title" = "Vedha Kali Linux Image"
     "org.opencontainers.image.description" = "Vedha (Wayam AI) Kali Linux worker container with 200+ curated CLI penetration testing tools"
-    "org.opencontainers.image.url" = "https://hub.docker.com/r/wayamai/kali-linux"
+    "org.opencontainers.image.url" = "https://hub.docker.com/r/mrigankad/kali-linux"
     "org.opencontainers.image.documentation" = "https://github.com/WayamAI/Vedha/blob/main/images/kali-linux/README.md"
     "org.opencontainers.image.source" = "https://github.com/WayamAI/Vedha"
     "org.opencontainers.image.vendor" = "vxcontrol"
@@ -79,7 +79,7 @@ target "systemd" {
   labels = {
     "org.opencontainers.image.title" = "Vedha Kali Linux Image (Systemd)"
     "org.opencontainers.image.description" = "Vedha (Wayam AI) Kali Linux worker container with systemctl support and 200+ penetration testing tools"
-    "org.opencontainers.image.url" = "https://hub.docker.com/r/wayamai/kali-linux"
+    "org.opencontainers.image.url" = "https://hub.docker.com/r/mrigankad/kali-linux"
     "org.opencontainers.image.documentation" = "https://github.com/WayamAI/Vedha/blob/main/images/kali-linux/README.md"
     "org.opencontainers.image.source" = "https://github.com/WayamAI/Vedha"
     "org.opencontainers.image.vendor" = "vxcontrol"

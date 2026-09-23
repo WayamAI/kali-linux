@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: wayamai
+  REGISTRY: mrigankad
 
 jobs:
   docker-build:

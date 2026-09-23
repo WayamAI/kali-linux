@@ -9,7 +9,7 @@
 set -e
 
 # Default image name
-DEFAULT_IMAGE="wayamai/kali-linux:latest"
+DEFAULT_IMAGE="mrigankad/kali-linux:latest"
 IMAGE_NAME="${1:-$DEFAULT_IMAGE}"
 
 # Check if we're running inside the container
