@@ -1,5 +1,5 @@
 # Docker Bake configuration for the Vedha Kali Linux worker images
-# Supports multi-platform builds with SBOM and provenance generation
+# Supports multi-platform builds with build provenance attestation
 
 group "default" {
   targets = ["base", "systemd"]
@@ -33,9 +33,10 @@ target "base" {
   ]
   
   # Security and compliance features - use stable SBOM scanner
+  # SBOM omitted: a 20 GB Kali image produces an SBOM larger than the 40 MB
+  # registry manifest limit, which fails the push. Provenance stays (small).
   attest = [
-    "type=provenance,mode=max",
-    "type=sbom,scanner=docker.io/docker/buildkit-syft-scanner:stable-1"
+    "type=provenance,mode=max"
   ]
   
   # Build metadata
@@ -68,9 +69,10 @@ target "systemd" {
   }
   
   # Security and compliance features - use stable SBOM scanner
+  # SBOM omitted: a 20 GB Kali image produces an SBOM larger than the 40 MB
+  # registry manifest limit, which fails the push. Provenance stays (small).
   attest = [
-    "type=provenance,mode=max",
-    "type=sbom,scanner=docker.io/docker/buildkit-syft-scanner:stable-1"
+    "type=provenance,mode=max"
   ]
   
   # Build metadata
