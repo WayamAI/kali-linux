@@ -1,8 +1,49 @@
-# Vedha Kali Linux Docker Images
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
+    <img src="assets/logo-light.png" width="110" alt="Vedha logo">
+  </picture>
 
-Lightweight Kali Linux Docker images with curated CLI penetration testing tools for headless environments. This project provides optimized Docker images for security research, penetration testing, and cybersecurity training.
+  <h1>Vedha Kali Linux Image</h1>
 
-> Maintained by [Wayam AI](https://github.com/WayamAI) as the default sandbox image for [Vedha](https://github.com/WayamAI/Vedha). Derived from the MIT-licensed [vxcontrol/kali-linux-image](https://github.com/vxcontrol/kali-linux-image).
+  <p><strong>The default AI-agent sandbox for <a href="https://github.com/WayamAI/Vedha">Vedha</a></strong><br>
+  A headless Kali Rolling container with 200+ curated CLI security tools, ready for autonomous penetration testing.</p>
+
+  <p>
+    <img src="https://img.shields.io/badge/base-kali%20rolling-267CB9" alt="Kali Rolling">
+    <img src="https://img.shields.io/badge/platform-linux%2Famd64%20%7C%20arm64-444" alt="Platforms">
+    <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
+    <img src="https://img.shields.io/badge/maintained%20by-Wayam%20AI-6D28D9" alt="Wayam AI">
+  </p>
+
+  <p>
+    <a href="#quick-start">Quick Start</a> ·
+    <a href="#available-images">Images</a> ·
+    <a href="#included-tools">Tools</a> ·
+    <a href="#usage">Usage</a> ·
+    <a href="#building-from-source">Build</a> ·
+    <a href="#ai-agent-integration">Vedha Integration</a>
+  </p>
+</div>
+
+---
+
+Vedha Kali Linux is a lean, reproducible Docker image built for security research, penetration testing, and cybersecurity training in headless environments. It is maintained by [Wayam AI](https://github.com/WayamAI) as the sandbox that [Vedha](https://github.com/WayamAI/Vedha) agents spawn to run tools. It is derived from the MIT-licensed [vxcontrol/kali-linux-image](https://github.com/vxcontrol/kali-linux-image).
+
+## Quick Start
+
+```bash
+# Pull the base image
+docker pull wayamai/kali-linux
+
+# Drop into an interactive shell with the current directory mounted
+docker run --rm -it -v "$(pwd):/work" -w /work wayamai/kali-linux bash
+
+# Run a single tool without an interactive session
+docker run --rm wayamai/kali-linux nmap --version
+```
+
+Two tags are published: `wayamai/kali-linux:latest` (the base image) and `wayamai/kali-linux:systemd` (adds `systemctl` support for tools that expect services). See [Available Images](#available-images) for the full matrix and [Building from Source](#building-from-source) to build locally.
 
 ## Description
 
