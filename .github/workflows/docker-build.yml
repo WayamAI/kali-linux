@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
     tags: ['v*']
+    # Do not rebuild the multi-GB image for docs-only or asset-only changes.
+    paths:
+      - 'Dockerfile'
+      - 'docker-bake.hcl'
+      - 'buildkitd.toml'
+      - 'container-entrypoint.sh'
+      - '.github/workflows/docker-build.yml'
   workflow_dispatch:
 
 env:
@@ -20,6 +27,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Verify Docker Hub credentials are configured
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [[ -z "$DOCKERHUB_USERNAME" || -z "$DOCKERHUB_TOKEN" ]]; then
+            echo "::error::Missing Docker Hub credentials."
+            echo "Add repository secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN:"
+            echo "  Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "Create the token at https://hub.docker.com -> Account Settings -> Personal access tokens (Read & Write)."
+            exit 1
+          fi
 
       - name: Free disk space (the image is large)
         run: |
